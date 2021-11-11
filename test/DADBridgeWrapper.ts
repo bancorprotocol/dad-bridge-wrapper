@@ -2,9 +2,9 @@ import Contracts from '../components/Contracts';
 import { TestERC20Token } from '../typechain';
 import { DADBridgeWrapper } from '../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { utils, BigNumber } from 'ethers';
+import { ethers } from 'hardhat';
 
 const ROLE_ADMIN = utils.id('ROLE_ADMIN');
 const TOTAL_SUPPLY = BigNumber.from(1_000_000_000);
