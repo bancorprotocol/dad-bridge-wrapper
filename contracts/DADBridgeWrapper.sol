@@ -10,21 +10,29 @@ contract DADBridgeWrapper is AccessControl {
 
     bytes32 public constant ROLE_ADMIN = keccak256("ROLE_ADMIN");
 
-    IERC20 public immutable token;
+    IERC20 private immutable _token;
 
-    uint256 public totalSupply;
+    uint256 private _totalSupply;
 
-    constructor(IERC20 _token) {
-        token = _token;
+    constructor(IERC20 tokenAddr) {
+        _token = tokenAddr;
         _setRoleAdmin(ROLE_ADMIN, ROLE_ADMIN);
         _setupRole(ROLE_ADMIN, msg.sender);
+    }
+
+    function token() public view returns (IERC20) {
+        return _token;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _totalSupply;
     }
 
     function mint(address recipient, uint256 amount) external onlyRole(ROLE_ADMIN) {
         require(recipient != address(0), "ERR_INVALID_RECIPIENT");
         require(amount > 0, "ERR_INVALID_AMOUNT");
-        token.safeTransfer(recipient, amount);
-        totalSupply += amount;
+        _token.safeTransfer(recipient, amount);
+        _totalSupply += amount;
     }
 
     function burn(address recipient, uint256 amount) external pure {
