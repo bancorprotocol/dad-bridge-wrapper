@@ -15,16 +15,13 @@ describe('DADBridgeWrapper', () => {
     let admin: SignerWithAddress;
     let user: SignerWithAddress;
 
-    let bntToken: TestERC20Token;
-    let ethBntToken: TestERC20Token;
+    let token: TestERC20Token;
     let dadBridgeWrapper: DADBridgeWrapper;
 
     const assertState = async (contractBalance: BigNumber, userBalance: BigNumber) => {
         expect(await dadBridgeWrapper.totalSupply()).to.equal(userBalance);
-        expect(await bntToken.balanceOf(user.address)).to.equal(userBalance);
-        expect(await ethBntToken.balanceOf(user.address)).to.equal(userBalance);
-        expect(await bntToken.balanceOf(dadBridgeWrapper.address)).to.equal(contractBalance);
-        expect(await ethBntToken.balanceOf(dadBridgeWrapper.address)).to.equal(contractBalance);
+        expect(await token.balanceOf(user.address)).to.equal(userBalance);
+        expect(await token.balanceOf(dadBridgeWrapper.address)).to.equal(contractBalance);
     };
 
     before(async () => {
@@ -32,13 +29,11 @@ describe('DADBridgeWrapper', () => {
     });
 
     beforeEach(async () => {
-        bntToken = await Contracts.TestERC20Token.deploy('BNT', 'BNT', TOTAL_SUPPLY);
-        ethBntToken = await Contracts.TestERC20Token.deploy('ETH/BNT', 'ETH/BNT', TOTAL_SUPPLY);
-        dadBridgeWrapper = await Contracts.DADBridgeWrapper.deploy(bntToken.address, ethBntToken.address);
+        token = await Contracts.TestERC20Token.deploy('BNT', 'BNT', TOTAL_SUPPLY);
+        dadBridgeWrapper = await Contracts.DADBridgeWrapper.deploy(token.address);
         await dadBridgeWrapper.grantRole(ROLE_ADMIN, admin.address);
         await dadBridgeWrapper.revokeRole(ROLE_ADMIN, deployer.address);
-        await bntToken.transfer(dadBridgeWrapper.address, TOTAL_SUPPLY);
-        await ethBntToken.transfer(dadBridgeWrapper.address, TOTAL_SUPPLY);
+        await token.transfer(dadBridgeWrapper.address, TOTAL_SUPPLY);
     });
 
     it('admin should be able to mint', async () => {
