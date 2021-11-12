@@ -1,6 +1,6 @@
 ﻿# dad-bridge-wrapper
 
-[![Build Status](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/ci.yml/badge.svg)](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/ci.yml)
+[![Build Status](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/workflow.yml/badge.svg)](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/workflow.yml)
 
 ## Testing
 
