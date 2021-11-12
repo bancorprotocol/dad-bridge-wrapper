@@ -15,6 +15,7 @@ contract DADBridgeWrapper is AccessControl {
     uint256 private _totalSupply;
 
     constructor(IERC20 tokenAddr) {
+        require(address(tokenAddr) != address(0), "ERR_INVALID_TOKEN");
         _token = tokenAddr;
         _setRoleAdmin(ROLE_ADMIN, ROLE_ADMIN);
         _setupRole(ROLE_ADMIN, msg.sender);
