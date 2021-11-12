@@ -1,10 +1,12 @@
-﻿## Testing
+﻿# dad-bridge-wrapper
 
-### Installation
+# Testing
+
+## Installation
 
 -   `yarn install`
 
-### Verification
+## Verification
 
 -   Verifying all the contracts:
     -   `yarn test` (quick testing)

@@ -21,5 +21,3 @@ allFiredEvents
 scTopics
 
 contracts/hardhat-dependency-compiler
-
-config.json
