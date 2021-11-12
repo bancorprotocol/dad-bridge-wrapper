@@ -1,12 +1,14 @@
 ﻿# dad-bridge-wrapper
 
-# Testing
+[![Build Status](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/ci.yml/badge.svg)](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/ci.yml)
 
-## Installation
+## Testing
+
+### Installation
 
 -   `yarn install`
 
-## Verification
+### Verification
 
 -   Verifying all the contracts:
     -   `yarn test` (quick testing)
