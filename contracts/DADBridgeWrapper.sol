@@ -6,6 +6,11 @@ import { Pausable } from "@openzeppelin/contracts/security/Pausable.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+error InvalidToken(IERC20 token);
+error InvalidRecipient(address recipient);
+error InvalidAmount(uint256 amount);
+error UnsupportedOperation();
+
 contract DADBridgeWrapper is AccessControl, Pausable {
     using SafeERC20 for IERC20;
 
@@ -19,7 +24,9 @@ contract DADBridgeWrapper is AccessControl, Pausable {
      * @dev initializes the contract
      */
     constructor(IERC20 tokenAddr) {
-        require(address(tokenAddr) != address(0), "ERR_INVALID_TOKEN");
+        if (address(tokenAddr) == address(0)) {
+            revert InvalidToken(tokenAddr);
+        }
         _token = tokenAddr;
         _setRoleAdmin(ROLE_ADMIN, ROLE_ADMIN);
         _setupRole(ROLE_ADMIN, msg.sender);
@@ -69,8 +76,12 @@ contract DADBridgeWrapper is AccessControl, Pausable {
      * - the caller must have the ROLE_ADMIN privileges, and the contract must not be paused
      */
     function mint(address recipient, uint256 amount) external onlyRole(ROLE_ADMIN) whenNotPaused {
-        require(recipient != address(0), "ERR_INVALID_RECIPIENT");
-        require(amount > 0, "ERR_INVALID_AMOUNT");
+        if (recipient == address(0)) {
+            revert InvalidRecipient(recipient);
+        }
+        if (amount == 0) {
+            revert InvalidAmount(amount);
+        }
         _token.safeTransfer(recipient, amount);
         _totalSupply += amount;
     }
@@ -78,6 +89,6 @@ contract DADBridgeWrapper is AccessControl, Pausable {
     function burn(address recipient, uint256 amount) external pure {
         recipient;
         amount;
-        revert("ERR_UNSUPPORTED_OPERATION");
+        revert UnsupportedOperation();
     }
 }
