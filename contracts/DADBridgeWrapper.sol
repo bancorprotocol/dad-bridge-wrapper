@@ -86,9 +86,10 @@ contract DADBridgeWrapper is AccessControl, Pausable {
         _totalSupply += amount;
     }
 
-    function burn(address recipient, uint256 amount) external virtual {
-        recipient;
-        amount;
+    function burn(
+        address, /* recipient */
+        uint256 /* amount */
+    ) external virtual {
         revert UnsupportedOperation();
     }
 }
