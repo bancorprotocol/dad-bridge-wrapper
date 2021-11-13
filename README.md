@@ -1,4 +1,8 @@
-﻿## Testing
+﻿# dad-bridge-wrapper
+
+[![Build Status](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/workflow.yml/badge.svg)](https://github.com/bancorprotocol/dad-bridge-wrapper/actions/workflows/workflow.yml)
+
+## Testing
 
 ### Installation
 
