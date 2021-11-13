@@ -36,6 +36,38 @@ describe('DADBridgeWrapper', () => {
         await token.transfer(dadBridgeWrapper.address, TOTAL_SUPPLY);
     });
 
+    it('admin should be able to pause', async () => {
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+        await dadBridgeWrapper.connect(admin).pause();
+        expect(await dadBridgeWrapper.paused()).to.be.true;
+    });
+
+    it('non-admin should not be able to pause', async () => {
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+        await expect(dadBridgeWrapper.connect(deployer).pause()).to.be.revertedWith(
+            `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
+        );
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+    });
+
+    it('admin should be able to unpause', async () => {
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+        await dadBridgeWrapper.connect(admin).pause();
+        expect(await dadBridgeWrapper.paused()).to.be.true;
+        await dadBridgeWrapper.connect(admin).unpause();
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+    });
+
+    it('non-admin should not be able to unpause', async () => {
+        expect(await dadBridgeWrapper.paused()).to.be.false;
+        await dadBridgeWrapper.connect(admin).pause();
+        expect(await dadBridgeWrapper.paused()).to.be.true;
+        await expect(dadBridgeWrapper.connect(deployer).unpause()).to.be.revertedWith(
+            `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
+        );
+        expect(await dadBridgeWrapper.paused()).to.be.true;
+    });
+
     it('admin should be able to mint', async () => {
         await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         await dadBridgeWrapper.connect(admin).mint(user.address, MINT_AMOUNT);
@@ -43,6 +75,23 @@ describe('DADBridgeWrapper', () => {
     });
 
     it('non-admin should not be able to mint', async () => {
+        await assertState(TOTAL_SUPPLY, BigNumber.from(0));
+        await expect(dadBridgeWrapper.connect(deployer).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
+            `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
+        );
+        await assertState(TOTAL_SUPPLY, BigNumber.from(0));
+    });
+
+    it('admin should not be able to mint when paused', async () => {
+        await assertState(TOTAL_SUPPLY, BigNumber.from(0));
+        await dadBridgeWrapper.connect(admin).pause();
+        await expect(dadBridgeWrapper.connect(admin).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
+            'Pausable: paused'
+        );
+        await assertState(TOTAL_SUPPLY, BigNumber.from(0));
+    });
+
+    it('non-admin should not be able to mint when paused', async () => {
         await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         await expect(dadBridgeWrapper.connect(deployer).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
             `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
