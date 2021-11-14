@@ -33,9 +33,7 @@ describe('DADBridgeWrapper', () => {
 
     describe('construction', () => {
         it('should revert when the token is invalid', async () => {
-            await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith(
-                `InvalidToken()`
-            );
+            await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith(`InvalidToken()`);
         });
     });
 
