@@ -31,7 +31,7 @@ describe('DADBridgeWrapper', () => {
         [deployer, admin, user] = await ethers.getSigners();
     });
 
-    describe('Constructions:', () => {
+    describe('construction:', () => {
         it('should revert when the token is invalid', async () => {
             await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith(
                 `InvalidToken()`
@@ -39,7 +39,7 @@ describe('DADBridgeWrapper', () => {
         });
     });
 
-    describe('Execution:', () => {
+    describe('execution:', () => {
         beforeEach(async () => {
             token = await Contracts.TestERC20Token.deploy('BNT', 'BNT', TOTAL_SUPPLY);
             dadBridgeWrapper = await Contracts.DADBridgeWrapper.deploy(token.address);
