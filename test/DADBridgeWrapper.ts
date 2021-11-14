@@ -9,9 +9,9 @@ import { ethers } from 'hardhat';
 const ROLE_ADMIN = utils.id('ROLE_ADMIN');
 const TOTAL_SUPPLY = BigNumber.from(1_000_000_000);
 const MINT_AMOUNT = BigNumber.from(1_000_000);
-const INVALID_TOKEN = '0x'.padEnd(42, '0');
-const INVALID_RECIPIENT = '0x'.padEnd(42, '0');
-const INVALID_AMOUNT = BigNumber.from(0);
+const INVALID_TOKEN = ethers.constants.AddressZero;
+const INVALID_RECIPIENT = ethers.constants.AddressZero;
+const INVALID_AMOUNT = ethers.constants.Zero;
 
 describe('DADBridgeWrapper', () => {
     let deployer: SignerWithAddress;
