@@ -6,9 +6,9 @@ import { Pausable } from "@openzeppelin/contracts/security/Pausable.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-error InvalidToken(IERC20 token);
-error InvalidRecipient(address recipient);
-error InvalidAmount(uint256 amount);
+error InvalidToken();
+error InvalidRecipient();
+error InvalidAmount();
 error UnsupportedOperation();
 
 contract DADBridgeWrapper is AccessControl, Pausable {
@@ -23,11 +23,11 @@ contract DADBridgeWrapper is AccessControl, Pausable {
     /**
      * @dev initializes the contract
      */
-    constructor(IERC20 tokenAddr) {
-        if (address(tokenAddr) == address(0)) {
-            revert InvalidToken(tokenAddr);
+    constructor(IERC20 initToken) {
+        if (address(initToken) == address(0)) {
+            revert InvalidToken();
         }
-        _token = tokenAddr;
+        _token = initToken;
         _setRoleAdmin(ROLE_ADMIN, ROLE_ADMIN);
         _setupRole(ROLE_ADMIN, msg.sender);
     }
@@ -77,10 +77,10 @@ contract DADBridgeWrapper is AccessControl, Pausable {
      */
     function mint(address recipient, uint256 amount) external onlyRole(ROLE_ADMIN) whenNotPaused {
         if (recipient == address(0)) {
-            revert InvalidRecipient(recipient);
+            revert InvalidRecipient();
         }
         if (amount == 0) {
-            revert InvalidAmount(amount);
+            revert InvalidAmount();
         }
         _token.safeTransfer(recipient, amount);
         _totalSupply += amount;

@@ -34,7 +34,7 @@ describe('DADBridgeWrapper', () => {
     describe('Constructions:', () => {
         it('should revert when the token is invalid', async () => {
             await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith(
-                `InvalidToken("${INVALID_TOKEN}")`
+                `InvalidToken()`
             );
         });
     });
@@ -59,7 +59,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).pause()).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            expect(await dadBridgeWrapper.paused()).to.be.false;
         });
 
         it('admin should be able to unpause', async () => {
@@ -77,7 +76,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).unpause()).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            expect(await dadBridgeWrapper.paused()).to.be.true;
         });
 
         it('admin should be able to mint', async () => {
@@ -91,7 +89,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('admin should not be able to mint when paused', async () => {
@@ -100,7 +97,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(admin).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
                 'Pausable: paused'
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('non-admin should not be able to mint when paused', async () => {
@@ -109,15 +105,13 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).mint(user.address, MINT_AMOUNT)).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('admin should not be able to mint to an invalid recipient', async () => {
             await assertState(TOTAL_SUPPLY, BigNumber.from(0));
             await expect(dadBridgeWrapper.connect(admin).mint(INVALID_RECIPIENT, MINT_AMOUNT)).to.be.revertedWith(
-                `InvalidRecipient("${INVALID_RECIPIENT}")`
+                `InvalidRecipient()`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('non-admin should not be able to mint to an invalid recipient', async () => {
@@ -125,15 +119,13 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).mint(INVALID_RECIPIENT, MINT_AMOUNT)).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('admin should not be able to mint an invalid amount', async () => {
             await assertState(TOTAL_SUPPLY, BigNumber.from(0));
             await expect(dadBridgeWrapper.connect(admin).mint(user.address, INVALID_AMOUNT)).to.be.revertedWith(
-                `InvalidAmount(${INVALID_AMOUNT})`
+                `InvalidAmount()`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('non-admin should not be able to mint an invalid amount', async () => {
@@ -141,7 +133,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).mint(user.address, INVALID_AMOUNT)).to.be.revertedWith(
                 `AccessControl: account ${deployer.address.toLowerCase()} is missing role ${ROLE_ADMIN}`
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('admin should not be able to burn', async () => {
@@ -149,7 +140,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(admin).burn(user.address, MINT_AMOUNT)).to.be.revertedWith(
                 'UnsupportedOperation'
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
 
         it('non-admin should not be able to burn', async () => {
@@ -157,7 +147,6 @@ describe('DADBridgeWrapper', () => {
             await expect(dadBridgeWrapper.connect(deployer).burn(user.address, MINT_AMOUNT)).to.be.revertedWith(
                 'UnsupportedOperation'
             );
-            await assertState(TOTAL_SUPPLY, BigNumber.from(0));
         });
     });
 });
