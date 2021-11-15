@@ -33,7 +33,7 @@ describe('DADBridgeWrapper', () => {
 
     describe('construction', () => {
         it('should revert when the token is invalid', async () => {
-            await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith(`InvalidToken()`);
+            await expect(Contracts.DADBridgeWrapper.deploy(INVALID_TOKEN)).to.be.revertedWith('InvalidToken');
         });
     });
 
@@ -108,7 +108,7 @@ describe('DADBridgeWrapper', () => {
         it('admin should not be able to mint to an invalid recipient', async () => {
             await assertState(TOTAL_SUPPLY, BigNumber.from(0));
             await expect(dadBridgeWrapper.connect(admin).mint(INVALID_RECIPIENT, MINT_AMOUNT)).to.be.revertedWith(
-                `InvalidRecipient()`
+                'InvalidRecipient'
             );
         });
 
@@ -122,7 +122,7 @@ describe('DADBridgeWrapper', () => {
         it('admin should not be able to mint an invalid amount', async () => {
             await assertState(TOTAL_SUPPLY, BigNumber.from(0));
             await expect(dadBridgeWrapper.connect(admin).mint(user.address, INVALID_AMOUNT)).to.be.revertedWith(
-                `InvalidAmount()`
+                'InvalidAmount'
             );
         });
 
