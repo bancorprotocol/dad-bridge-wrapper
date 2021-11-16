@@ -1,0 +1,23 @@
+.DS_Store
+.vscode/
+*/**/.DS_Store
+
+# node
+/node_modules
+yarn-debug.log*
+yarn-error.log*
+
+/cache
+/artifacts
+/typechain
+/data
+
+.coverage_artifacts
+.coverage_contracts
+coverage
+coverageEnv
+coverage.json
+allFiredEvents
+scTopics
+
+contracts/hardhat-dependency-compiler
